@@ -15,7 +15,7 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   @override
   Widget build(context) {
-    final currenQuestion = questions[0];
+    final currentQuestion = questions[0];
 
     return SizedBox(
       width: double.infinity,
@@ -23,31 +23,18 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            currenQuestion.text,
+            currentQuestion.text,
             style: const TextStyle(
               color: Colors.white,
             ),
           ),
           const SizedBox(height: 20.0),
-          AnswerButton(
-            answerText: currenQuestion.answers[0],
-            onTap: () {},
-          ),
-          const SizedBox(height: 10.0),
-          AnswerButton(
-            answerText: currenQuestion.answers[1],
-            onTap: () {},
-          ),
-          const SizedBox(height: 10.0),
-          AnswerButton(
-            answerText: currenQuestion.answers[2],
-            onTap: () {},
-          ),
-          const SizedBox(height: 10.0),
-          AnswerButton(
-            answerText: currenQuestion.answers[3],
-            onTap: () {},
-          ),
+          ...currentQuestion.answers.map((item) { // Spred operator: ...
+            return AnswerButton(
+              answerText: item,
+              onTap: () {},
+            );
+          }),
         ],
       ),
     );
