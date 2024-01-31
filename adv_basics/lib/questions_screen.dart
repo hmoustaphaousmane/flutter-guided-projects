@@ -33,7 +33,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20.0),
-            ...currentQuestion.answers.map((item) { // Spred operator: ...
+            ...currentQuestion.getShuffledAnswers().map((item) { // Spred operator: ...
               return AnswerButton(
                 answerText: item,
                 onTap: () {},
