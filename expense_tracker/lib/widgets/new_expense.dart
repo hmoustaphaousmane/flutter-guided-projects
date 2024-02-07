@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:expense_tracker/models/expense.dart';
 
@@ -42,7 +41,7 @@ class _NewExpense extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(14.0),
       child: Column(
         children: [
           TextField(
@@ -52,13 +51,6 @@ class _NewExpense extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
-<<<<<<< HEAD
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(prefixText: '\$', label: Text('Amount'),),
-            keyboardType: TextInputType.number,
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-=======
           Row(
             children: [
               Expanded(
@@ -78,7 +70,7 @@ class _NewExpense extends State<NewExpense> {
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       _selectedDate == null
@@ -95,12 +87,13 @@ class _NewExpense extends State<NewExpense> {
                 ),
               ),
             ],
->>>>>>> 413a78a (feat: show a date picker when the icon button calendar is hit)
           ),
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
