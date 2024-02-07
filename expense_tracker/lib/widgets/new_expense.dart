@@ -10,10 +10,13 @@ class NewExpense extends StatefulWidget {
 }
 
 class _NewExpense extends State<NewExpense> {
-  var _enteredTitle = '';
+  final _titleController = TextEditingController();
 
-  void _saveTitleInput(String inputValue) {
-    _enteredTitle = inputValue;
+  // Always tell flutter to delete the controller if it si not needed any more (this to free the memory)
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
   }
 
   @override
@@ -23,14 +26,14 @@ class _NewExpense extends State<NewExpense> {
       child: Column(
         children: [
           TextField(
-            onChanged: _saveTitleInput,
+            controller: _titleController,
             maxLength: 50,
             decoration: const InputDecoration(
               label: Text('Title'),
             ),
           ),
           Row(children: [ElevatedButton(onPressed: () {
-            debugPrint(_enteredTitle);
+            debugPrint(_titleController.text);
           }, child: const Text('Save Expense')),],),
         ],
       ),
