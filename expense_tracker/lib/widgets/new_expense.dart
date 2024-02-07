@@ -15,6 +15,12 @@ class _NewExpense extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    showDatePicker(context: context, firstDate: firstDate, lastDate: now);
+  }
+
   // Always tell flutter to delete the controller if it si not needed any more (this to free the memory)
   @override
   void dispose() {
@@ -36,11 +42,46 @@ class _NewExpense extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
+<<<<<<< HEAD
           TextField(
             controller: _amountController,
             decoration: const InputDecoration(prefixText: '\$', label: Text('Amount'),),
             keyboardType: TextInputType.number,
             // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+=======
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    label: Text('Amount'),
+                  ),
+                  keyboardType: TextInputType.number,
+                  // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                ),
+              ),
+              const SizedBox(
+                width: 16.0,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Selected Date'),
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(
+                        Icons.calendar_month,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+>>>>>>> 413a78a (feat: show a date picker when the icon button calendar is hit)
           ),
           Row(
             children: [
