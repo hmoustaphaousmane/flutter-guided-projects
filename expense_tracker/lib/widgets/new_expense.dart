@@ -9,11 +9,11 @@ class NewExpense extends StatefulWidget {
 
   @override
   State<NewExpense> createState() {
-    return _NewExpense();
+    return _NewExpenseState();
   }
 }
 
-class _NewExpense extends State<NewExpense> {
+class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
@@ -22,9 +22,9 @@ class _NewExpense extends State<NewExpense> {
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
-
     final pickedDate = await showDatePicker(
       context: context,
+      initialDate: now,
       firstDate: firstDate,
       lastDate: now,
     );
@@ -34,7 +34,8 @@ class _NewExpense extends State<NewExpense> {
   }
 
   void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
+    final enteredAmount = double.tryParse(_amountController
+        .text); // tryParse('Hello') => null, tryParse('1.12') => 1.12
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
@@ -45,7 +46,7 @@ class _NewExpense extends State<NewExpense> {
         builder: (ctx) => AlertDialog(
           title: const Text('Invalid input'),
           content: const Text(
-              'Please make sure a valide title, amout, date and category was entered.'),
+              'Please make sure a valid title, amount, date and category was entered.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -58,12 +59,13 @@ class _NewExpense extends State<NewExpense> {
       );
       return;
     }
+
     widget.onAddExpense(
       Expense(
         title: _titleController.text,
         amount: enteredAmount,
         date: _selectedDate!,
-        category: _selectedCategory.name,
+        category: _selectedCategory,
       ),
     );
     Navigator.pop(context);
@@ -80,7 +82,7 @@ class _NewExpense extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14.0, 28.0, 14.0, 14.0),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(

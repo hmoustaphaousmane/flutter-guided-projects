@@ -19,19 +19,19 @@ class _ExpensesState extends State<Expenses> {
       title: 'Flutter Course',
       amount: 19.99,
       date: DateTime.now(),
-      category: (Category.work).toString(),
+      category: (Category.work),
     ),
     Expense(
       title: 'Cinema',
       amount: 15.69,
       date: DateTime.now(),
-      category: (Category.leisure).toString(),
+      category: (Category.leisure),
     ),
     Expense(
       title: 'Chawarma',
       amount: 11.39,
       date: DateTime.now(),
-      category: (Category.food).toString(),
+      category: (Category.food),
     ),
   ];
 

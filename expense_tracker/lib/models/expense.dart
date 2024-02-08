@@ -26,7 +26,7 @@ class Expense {
   final String title;
   final double amount;
   final DateTime date;
-  final String category;
+  final Category category;
 
   String get formattedDate {
     return formatter.format(date);
@@ -50,7 +50,7 @@ class ExpenseBucket {
   double get totalExpenses {
     double sum = 0;
 
-    for (var expense in expenses) {
+    for (final expense in expenses) {
       sum += expense.amount;
     }
 
