@@ -72,7 +72,10 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text('The chart'),
           Expanded(
-            child: ExpenseList(expenses: _registredExpenses, onRemoveExpense: _removeExpense),
+            child: ExpenseList(
+              expenses: _registredExpenses,
+              onRemoveExpense: _removeExpense,
+            ),
           )
         ],
       ),
