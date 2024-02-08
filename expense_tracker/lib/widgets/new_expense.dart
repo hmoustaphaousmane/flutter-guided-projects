@@ -31,6 +31,33 @@ class _NewExpense extends State<NewExpense> {
     });
   }
 
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // Show error message
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+              'Please make sure a valide title, amout, date and category was entered.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+  }
+
   // Always tell flutter to delete the controller if it si not needed any more (this to free the memory)
   @override
   void dispose() {
@@ -89,7 +116,9 @@ class _NewExpense extends State<NewExpense> {
               ),
             ],
           ),
-          const SizedBox(height: 14.0,),
+          const SizedBox(
+            height: 14.0,
+          ),
           Row(
             children: [
               DropdownButton(
@@ -122,10 +151,7 @@ class _NewExpense extends State<NewExpense> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  debugPrint(_titleController.text);
-                  debugPrint(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('Save Expense'),
               ),
             ],
