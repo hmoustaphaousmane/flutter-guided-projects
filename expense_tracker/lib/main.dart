@@ -34,7 +34,7 @@ void main() {
               titleLarge: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: kColorScheme.onSecondaryContainer,
-                // fontSize: 14.0,
+                fontSize: 14.0,
               ),
             ),
       ),

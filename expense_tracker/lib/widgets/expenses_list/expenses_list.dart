@@ -23,6 +23,12 @@ class ExpenseList extends StatelessWidget {
         // Dimissible allows to wipe an item to remove/delete it
         key: ValueKey(
           expenses[index],
+        ),
+        background: Container(
+          color: Theme.of(context).colorScheme.error.withOpacity(0.75),
+          margin: EdgeInsets.symmetric(
+            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
+          ),
         ), // This is a unique identifier (of the item to be romved)
         onDismissed: (direction) {
           // Remove the item from the list on dimissed
