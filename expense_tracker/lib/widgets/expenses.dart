@@ -51,9 +51,32 @@ class _ExpensesState extends State<Expenses> {
 
   // Method that removes an expense from the registred expense list
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registredExpenses.indexOf(expense);
+
     setState(() {
       _registredExpenses.remove(expense);
     });
+
+    // Clear all existing info messages
+    ScaffoldMessenger.of(context).clearSnackBars();
+
+    // Show an info message after an expense is romoved
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Expense deleted.'),
+        action: SnackBarAction(
+          // Action that could be done it the info message
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              // Add  back the removed expense to the list
+              _registredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -64,11 +87,11 @@ class _ExpensesState extends State<Expenses> {
 
     if (_registredExpenses.isNotEmpty) {
       mainContent = ExpenseList(
-              expenses: _registredExpenses,
-              onRemoveExpense: _removeExpense,
-            );
+        expenses: _registredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter Expense Tracker'),
