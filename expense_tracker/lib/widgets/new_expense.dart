@@ -66,6 +66,7 @@ class _NewExpense extends State<NewExpense> {
         category: _selectedCategory.name,
       ),
     );
+    Navigator.pop(context);
   }
 
   // Always tell flutter to delete the controller if it si not needed any more (this to free the memory)
@@ -79,7 +80,7 @@ class _NewExpense extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.fromLTRB(14.0, 28.0, 14.0, 14.0),
       child: Column(
         children: [
           TextField(
