@@ -26,7 +26,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           Navigator.of(context).pop(); // Close the drawer
           if (identifier == 'meals') {
             // Go to the filters screen
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (ctx) => const TabsScreen(),
               ),
