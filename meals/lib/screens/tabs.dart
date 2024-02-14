@@ -52,6 +52,7 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   void _setScreen(String identifier) {
+    Navigator.of(context).pop(); // Close the drawer
     if (identifier == 'filters') {
       // Go to the filters screen
       Navigator.of(context).push(
@@ -59,10 +60,6 @@ class _TabsScreenState extends State<TabsScreen> {
           builder: (ctx) => const FiltersScreen(),
         ),
       );
-    } else {
-      // hense identifier == 'mails'
-      // Close the drawer if the current screen is the meals screen
-      Navigator.of(context).pop();
     }
   }
 
