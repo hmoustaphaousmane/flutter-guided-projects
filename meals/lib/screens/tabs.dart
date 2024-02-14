@@ -50,6 +50,16 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
+  void _setScreen(String identifier) {
+    if (identifier == 'filters') {
+      // Close the drawer and go to the filters screen
+
+    } else { // hense identifier == 'mails'
+      // Close the drawer if the current screen is the meals screen
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = CategoriesScreen(
@@ -68,7 +78,7 @@ class _TabsScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      drawer: const MainDrawer(), // Adding a Side Drawer
+      drawer: MainDrawer(onSelectScreen: _setScreen), // Adding a Side Drawer
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
