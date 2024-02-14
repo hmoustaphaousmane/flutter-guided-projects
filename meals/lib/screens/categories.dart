@@ -9,11 +9,9 @@ import 'package:meals/widgets/category_grid_item.dart';
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({
     super.key,
-    required this.onToaggleFavorite,
     required this.availableMeals,
   });
 
-  final void Function(Meal meal) onToaggleFavorite;
   final List<Meal> availableMeals;
 
   void _selectCategory(BuildContext context, Category category) {
@@ -29,7 +27,6 @@ class CategoriesScreen extends StatelessWidget {
         builder: (ctx) => MealsScreen(
           title: category.title,
           meals: filteredMeals,
-          onToaggleFavorite: onToaggleFavorite,
         ),
       ),
     ); // push route on top of the current stack of screens
