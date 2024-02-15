@@ -15,32 +15,32 @@ class NewItem extends StatefulWidget {
 }
 
 class _NewItemState extends State<NewItem> {
+  final _formKey = GlobalKey<FormState>(); // Create a global key to ease
+  // access to underlyin widget hence to get access to the form
+  var _enteredName = '';
+  var _enteredQuantity = 1;
+  var _selectedCategory = categories[Categories.vegetables]!;
+
+  void _saveItem() {
+    // Tell flutter to execute all the validatore that are registered for all fields
+    if (_formKey.currentState!.validate()) {
+      // validate() access all the form field widget inside of the form and
+      // executes its validator functions, returns true if all validations
+      // pass and false otherwise
+      _formKey.currentState!.save(); // Save the form
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>(); // Create a global key to ease
-    // access to underlyin widget hence to get access to the form
-    var _enteredName = '';
-    var _enteredQuantity = 1;
-    var _selectedCategory = categories[Categories.vegetables]!;
-
-    void _saveItem() {
-      // Tell flutter to execute all the validatore that are registered for all fields
-      if (_formKey.currentState!.validate()) {
-        // validate() access all the form field widget inside of the form and
-        // executes its validator functions, returns true if all validations
-        // pass and false otherwise
-        _formKey.currentState!.save(); // Save the form
-        Navigator.of(context).pop(
-          GroceryItem(
-            id: DateTime.now().toString(),
-            name: _enteredName,
-            quantity: _enteredQuantity,
-            category: _selectedCategory,
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add a new item'),
@@ -143,7 +143,6 @@ class _NewItemState extends State<NewItem> {
                     },
                     child: const Text('Reset'),
                   ),
-                  // const SizedBox(),
                   ElevatedButton(
                     onPressed: _saveItem,
                     child: const Text('Add item'),
