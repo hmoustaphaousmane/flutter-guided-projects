@@ -13,6 +13,17 @@ class NewItem extends StatefulWidget {
 class _NewItemState extends State<NewItem> {
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>(); // Create a global key to ease access to
+    // underlyin widget hence to get access to the form
+
+    void _saveItem() {
+      // Tell flutter to execute all the validatore that are registered for all fields
+      _formKey.currentState!.validate();
+      // validate() access all the form field widget inside of the form and
+      // executes its validator functions, returns true if all validations
+      // pass and false otherwise
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add a new item'),
@@ -21,6 +32,9 @@ class _NewItemState extends State<NewItem> {
         padding: const EdgeInsets.all(12),
         child: Form(
           // New item form
+
+          key: _formKey,
+
           child: Column(
             children: [
               TextFormField(
@@ -47,16 +61,17 @@ class _NewItemState extends State<NewItem> {
                       decoration: const InputDecoration(
                         label: Text('Quantitye'),
                       ),
+                      keyboardType: TextInputType.number,
                       initialValue: '1',
-                validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null ||
-                      int.tryParse(value)! <= 0) {
-                    return 'Must be between 1 and 50 characters.';
-                  }
-                  return null;
-                },
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            int.tryParse(value) == null ||
+                            int.tryParse(value)! <= 0) {
+                          return 'Must be a valid, positive number.';
+                        }
+                        return null;
+                      },
                     ),
                   ), //
                   const SizedBox(
@@ -92,12 +107,14 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _formKey.currentState!.reset();
+                    },
                     child: const Text('Reset'),
                   ),
                   // const SizedBox(),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _saveItem,
                     child: const Text('Add item'),
                   ),
                 ],
