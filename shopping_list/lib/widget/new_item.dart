@@ -1,5 +1,8 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/models/category.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -13,15 +16,23 @@ class NewItem extends StatefulWidget {
 class _NewItemState extends State<NewItem> {
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>(); // Create a global key to ease access to
-    // underlyin widget hence to get access to the form
+    final _formKey = GlobalKey<FormState>(); // Create a global key to ease
+    // access to underlyin widget hence to get access to the form
+    var _enteredName = '';
+    var _enteredQuantity = 1;
+    var _selectedCategory = categories[Categories.vegetables]!;
 
     void _saveItem() {
       // Tell flutter to execute all the validatore that are registered for all fields
-      _formKey.currentState!.validate();
-      // validate() access all the form field widget inside of the form and
-      // executes its validator functions, returns true if all validations
-      // pass and false otherwise
+      if (_formKey.currentState!.validate()) {
+        // validate() access all the form field widget inside of the form and
+        // executes its validator functions, returns true if all validations
+        // pass and false otherwise
+        _formKey.currentState!.save(); // Save the form
+        print(_enteredName);
+        print(_enteredQuantity);
+        print(_selectedCategory);
+      }
     }
 
     return Scaffold(
@@ -52,6 +63,9 @@ class _NewItemState extends State<NewItem> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  _enteredName = value!;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -62,7 +76,7 @@ class _NewItemState extends State<NewItem> {
                         label: Text('Quantitye'),
                       ),
                       keyboardType: TextInputType.number,
-                      initialValue: '1',
+                      initialValue: _enteredQuantity.toString(),
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -72,31 +86,42 @@ class _NewItemState extends State<NewItem> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        _enteredQuantity = int.parse(value!);
+                      },
                     ),
                   ), //
                   const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: DropdownButtonFormField(items: [
-                      for (final category in categories.entries)
-                        DropdownMenuItem(
-                          value: category.value,
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 16,
-                                height: 16,
-                                color: category.value.color,
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              Text(category.value.title)
-                            ],
+                    child: DropdownButtonFormField(
+                      value: _selectedCategory,
+                      items: [
+                        for (final category in categories.entries)
+                          DropdownMenuItem(
+                            value: category.value,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  color: category.value.color,
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                ),
+                                Text(category.value.title)
+                              ],
+                            ),
                           ),
-                        ),
-                    ], onChanged: (value) {}),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategory = value!;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
