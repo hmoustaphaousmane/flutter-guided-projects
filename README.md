@@ -6,7 +6,9 @@
 
 ## 3. Expense Tracker
 
-## Flutter Internals
+## 4. Flutter Internals
 
-## 3 Meals
+## 5. Meals
+
+## 6. Shopping List
 
