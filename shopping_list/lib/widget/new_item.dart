@@ -25,6 +25,7 @@ class _NewItemState extends State<NewItem> {
   var _enteredName = '';
   var _enteredQuantity = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
+  var _isSending = false;
 
   void _saveItem() async {
     // Tell flutter to execute all the validatore that are registered for all fields
@@ -33,6 +34,9 @@ class _NewItemState extends State<NewItem> {
       // executes its validator functions, returns true if all validations
       // pass and false otherwise
       _formKey.currentState!.save(); // Save the form
+      setState(() {
+        _isSending = true;
+      });
 
       // Store the data into a backend, firebase in this case
       final url = Uri.https(
@@ -170,14 +174,23 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {
-                      _formKey.currentState!.reset();
-                    },
+                    // `onPressed: null`, disables the button
+                    onPressed: _isSending
+                        ? null
+                        : () {
+                            _formKey.currentState!.reset();
+                          },
                     child: const Text('Reset'),
                   ),
                   ElevatedButton(
-                    onPressed: _saveItem,
-                    child: const Text('Add item'),
+                    onPressed: _isSending ? null : _saveItem,
+                    child: _isSending
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(),
+                          )
+                        : const Text('Add item'),
                   ),
                 ],
               )
