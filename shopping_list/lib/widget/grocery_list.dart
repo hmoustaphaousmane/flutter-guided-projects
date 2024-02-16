@@ -32,45 +32,51 @@ class _GroceryListState extends State<GroceryList> {
       'flutter-prep-mossosouk-default-rtdb.firebaseio.com',
       'shopping-list.json',
     );
-    final response = await http.get(url); // Send a get request to fetch data
+    try {
+      final response = await http.get(url); // Send a get request to fetch data
 
-    if (response.statusCode >= 400) {
-      // statusCode >= 400 means an error has occured
+      if (response.statusCode >= 400) {
+        // statusCode >= 400 means an error has occured
+        setState(() {
+          _error = 'Failed to fetch data. Please try again later!';
+        });
+      }
+
+      if (response.body == 'null') {
+        // If there is no data
+        // i.e if firbase returns the string 'null'
+        setState(() {
+          _isLoading = false; // Do not display the loading spinner
+        });
+        return; // Do not execute the above remaining code of the method
+      }
+      // Convert the JSON text format back to a map
+      final Map<String, dynamic> listData = json.decode(response.body);
+
+      // Convert the map listData to a list of groceries List<GroceryItem>
+      final List<GroceryItem> loadedItemsList = [];
+      for (var item in listData.entries) {
+        final category = categories.entries
+            .firstWhere(
+                (catItem) => catItem.value.title == item.value['category'])
+            .value;
+        loadedItemsList.add(
+          GroceryItem(
+              id: item.key,
+              name: item.value['name'],
+              quantity: item.value['quantity'],
+              category: category),
+        );
+      }
       setState(() {
-        _error = 'Failed to fetch data. Please try again later!';
+        _groceryItems = loadedItemsList;
+        _isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        _error = 'Something went wrong. Please try again later!';
       });
     }
-
-    if (response.body == 'null') { // If there is no data 
-    // i.e if firbase returns the string 'null'
-      setState(() {
-        _isLoading = false; // Do not display the loading spinner
-      });
-      return; // Do not execute the above remaining code of the method
-    }
-
-    // Convert the JSON text format back to a map
-    final Map<String, dynamic> listData = json.decode(response.body);
-
-    // Convert the map listData to a list of groceries List<GroceryItem>
-    final List<GroceryItem> loadedItemsList = [];
-    for (var item in listData.entries) {
-      final category = categories.entries
-          .firstWhere(
-              (catItem) => catItem.value.title == item.value['category'])
-          .value;
-      loadedItemsList.add(
-        GroceryItem(
-            id: item.key,
-            name: item.value['name'],
-            quantity: item.value['quantity'],
-            category: category),
-      );
-    }
-    setState(() {
-      _groceryItems = loadedItemsList;
-      _isLoading = false;
-    });
   }
 
   void _addItem() async {
