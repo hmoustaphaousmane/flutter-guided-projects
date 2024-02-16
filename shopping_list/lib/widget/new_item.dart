@@ -25,7 +25,7 @@ class _NewItemState extends State<NewItem> {
   var _enteredQuantity = 1;
   var _selectedCategory = categories[Categories.vegetables]!;
 
-  void _saveItem() {
+  void _saveItem() async {
     // Tell flutter to execute all the validatore that are registered for all fields
     if (_formKey.currentState!.validate()) {
       // validate() access all the form field widget inside of the form and
@@ -38,7 +38,7 @@ class _NewItemState extends State<NewItem> {
         'flutter-prep-mossosouk-default-rtdb.firebaseio.com',
         'shopping-list.json',
       );
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,14 @@ class _NewItemState extends State<NewItem> {
         ),
       );
 
-      // Navigator.of(context).pop();
+      print(response.body);
+      print(response.statusCode);
+
+      if (!context.mounted) {
+        return;
+      }
+
+      Navigator.of(context).pop();
     }
   }
 
