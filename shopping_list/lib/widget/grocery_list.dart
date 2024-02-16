@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -80,10 +81,32 @@ class _GroceryListState extends State<GroceryList> {
     });
   }
 
-  void _removeItem(GroceryItem item) {
+  void _removeItem(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
     setState(() {
       _groceryItems.remove(item);
     });
+
+    // Fetch the item to be removed
+    final url = Uri.https(
+      'flutter-prep-mossosouk-default-rtdb.firebaseio.com',
+      'shopping-list/${item.id}.json',
+    );
+    final response = await http.delete(url); // Delete the item
+
+    if (response.statusCode >= 400) {
+      // Schedule Snackbar display for next frame
+      Timer(const Duration(milliseconds: 0), () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Something went wrong. Please try again later.'),
+          ),
+        );
+      });
+      setState(() {
+        _groceryItems.insert(index, item);
+      });
+    }
   }
 
   @override
