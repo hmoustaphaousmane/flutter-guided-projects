@@ -41,6 +41,14 @@ class _GroceryListState extends State<GroceryList> {
       });
     }
 
+    if (response.body == 'null') { // If there is no data 
+    // i.e if firbase returns the string 'null'
+      setState(() {
+        _isLoading = false; // Do not display the loading spinner
+      });
+      return; // Do not execute the above remaining code of the method
+    }
+
     // Convert the JSON text format back to a map
     final Map<String, dynamic> listData = json.decode(response.body);
 
