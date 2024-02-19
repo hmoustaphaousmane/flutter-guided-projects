@@ -12,3 +12,5 @@
 
 ## 6. Shopping List
 
+## 7. Favorite Places
+
