@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddPlaceScreen extends StatefulWidget {
+import 'package:favorite_places/providers/user_places.dart';
+
+class AddPlaceScreen extends ConsumerStatefulWidget {
   const AddPlaceScreen({super.key});
 
   @override
-  State<AddPlaceScreen> createState() => _AddPlaceScreenState();
+  ConsumerState<AddPlaceScreen> createState() => _AddPlaceScreenState();
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
-
+class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     final _titleController = TextEditingController();
+
+    void _savePlace() {
+      final entredTitle = _titleController.text;
+
+      if (entredTitle == 'null' || entredTitle.isEmpty) {
+        return;
+      }
+
+      ref.read(userPlacesProvider.notifier).addPlace(entredTitle);
+
+      Navigator.of(context).pop();
+    }
 
     @override
     void dispose() {
@@ -33,13 +47,14 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                 labelText: 'Title', // Use libelText instead of label
               ),
               controller: _titleController,
-              style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onBackground),
             ),
             const SizedBox(
               height: 16,
             ),
             ElevatedButton.icon(
-              onPressed: () {}, // Save the place
+              onPressed: _savePlace, // Save the place
               icon: const Icon(Icons.add),
               label: const Text('Add Place'),
             ),
