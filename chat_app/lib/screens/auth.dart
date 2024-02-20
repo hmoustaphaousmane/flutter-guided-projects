@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/widgets/user_image_picker.dart';
@@ -22,6 +23,7 @@ class _AuthSceenState extends State<AuthSceen> {
   var _enteredEmail = '';
   var _enteredPassword = '';
   File? _selectedImage;
+  var _isAuthenticationg = false;
 
   void _submit() async {
     final _isValid = _fomKey.currentState!.validate(); // Validate the form
@@ -34,6 +36,9 @@ class _AuthSceenState extends State<AuthSceen> {
     _fomKey.currentState!.save();
 
     try {
+      setState(() {
+        _isAuthenticationg = true;
+      });
       if (_isLogin) {
         // Log users in
         final userCredentials = await _firebase.signInWithEmailAndPassword(
@@ -44,6 +49,16 @@ class _AuthSceenState extends State<AuthSceen> {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
         // print(userCredentials);
+
+        // Store the picked image on firebase storage
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCredentials.user!.uid}.jpg');
+
+        await storageRef.putFile(_selectedImage!);
+        final imageUrl = await storageRef.getDownloadURL();
+        print(imageUrl);
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {}
@@ -55,6 +70,9 @@ class _AuthSceenState extends State<AuthSceen> {
           content: Text(error.message ?? 'Authenticaiton failed.'),
         ),
       );
+      setState(() {
+        _isAuthenticationg = false;
+      });
     }
   }
 
@@ -90,7 +108,7 @@ class _AuthSceenState extends State<AuthSceen> {
                         // Form inputs
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (_isLogin)
+                          if (!_isLogin)
                             UserImagePicker(onPickImage: (pickedIamge) {
                               _selectedImage = pickedIamge;
                             }),
@@ -130,25 +148,29 @@ class _AuthSceenState extends State<AuthSceen> {
                             },
                           ),
                           const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed: _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                          if (_isAuthenticationg)
+                            const CircularProgressIndicator(),
+                          if (!_isAuthenticationg)
+                            ElevatedButton(
+                              onPressed: _submit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                              ),
+                              child: Text(_isLogin ? 'Login' : 'Sigup'),
                             ),
-                            child: Text(_isLogin ? 'Login' : 'Sigup'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(_isLogin
-                                ? 'Create an account'
-                                : 'Already have an account? Login.'),
-                          ),
+                          if (!_isAuthenticationg)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLogin = !_isLogin;
+                                });
+                              },
+                              child: Text(_isLogin
+                                  ? 'Create an account'
+                                  : 'Already have an account? Login.'),
+                            ),
                         ],
                       ),
                     ),
