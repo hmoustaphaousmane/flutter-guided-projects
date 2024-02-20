@@ -9,7 +9,21 @@ class AuthSceen extends StatefulWidget {
 }
 
 class _AuthSceenState extends State<AuthSceen> {
+  final _fomKey = GlobalKey<FormState>();
+
   var _isLogin = true;
+  var _enteredEmail = '';
+  var _enteredPassword = '';
+
+  void _submit() {
+    final _isValid = _fomKey.currentState!.validate(); // Validate the form
+
+    if (_isValid) {
+      _fomKey.currentState!.save();
+      print(_enteredEmail);
+      print(_enteredPassword);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +52,7 @@ class _AuthSceenState extends State<AuthSceen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
+                      key: _fomKey,
                       child: Column(
                         // Form inputs
                         mainAxisSize: MainAxisSize.min,
@@ -48,16 +63,38 @@ class _AuthSceenState extends State<AuthSceen> {
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false, // Turn off autocorrection
                             textCapitalization: TextCapitalization.none,
+                            // Validate the email adress
+                            validator: (value) {
+                              if (value == null ||
+                                  value.trim().isEmpty ||
+                                  !value.contains('@')) {
+                                return 'Please enter a valid email adress.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _enteredEmail = value!;
+                            },
                           ),
                           TextFormField(
                             decoration:
                                 const InputDecoration(labelText: 'Password'),
                             obscureText:
                                 true, // Hide the characters as being entered
+                            // Validate the password
+                            validator: (value) {
+                              if (value == null || value.trim().length < 6) {
+                                return 'Password must be at leat 6 characters long.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _enteredPassword = value!;
+                            },
                           ),
                           const SizedBox(height: 12),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _submit,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context)
                                   .colorScheme
