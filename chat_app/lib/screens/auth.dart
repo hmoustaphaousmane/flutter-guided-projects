@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 // Authentication screen widget
 class AuthSceen extends StatefulWidget {
@@ -15,13 +18,34 @@ class _AuthSceenState extends State<AuthSceen> {
   var _enteredEmail = '';
   var _enteredPassword = '';
 
-  void _submit() {
+  void _submit() async {
     final _isValid = _fomKey.currentState!.validate(); // Validate the form
 
-    if (_isValid) {
-      _fomKey.currentState!.save();
-      print(_enteredEmail);
-      print(_enteredPassword);
+    if (!_isValid) {
+      return;
+    }
+
+    _fomKey.currentState!.save();
+
+    if (_isLogin) {
+      // Log users in
+    } else {
+      // Signup users
+      try {
+        final userCredentials = await _firebase.createUserWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+            print(userCredentials);
+      } on FirebaseAuthException catch (error) {
+        if (error.code == 'email-already-in-use') {}
+        // Error handling
+        ScaffoldMessenger.of(context).clearSnackBars(); // Clear exesting Snacks
+        ScaffoldMessenger.of(context).showSnackBar(
+          // Show error message
+          SnackBar(
+            content: Text(error.message ?? 'Authenticaiton failed.'),
+          ),
+        ); // Clear exesting Snacks
+      }
     }
   }
 
@@ -109,7 +133,7 @@ class _AuthSceenState extends State<AuthSceen> {
                               });
                             },
                             child: Text(_isLogin
-                                ? 'Create anaccount'
+                                ? 'Create an account'
                                 : 'Already have an account? Login.'),
                           ),
                         ],
