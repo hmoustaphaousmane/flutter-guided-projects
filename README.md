@@ -12,5 +12,8 @@
 
 ## 6. Shopping List
 
-## 7. Favorite Places
+## 7. Favorite Places (!)
+
+## 8. Chat App
+
 
