@@ -9,6 +9,8 @@ class AuthSceen extends StatefulWidget {
 }
 
 class _AuthSceenState extends State<AuthSceen> {
+  var _isLogin = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +54,26 @@ class _AuthSceenState extends State<AuthSceen> {
                                 const InputDecoration(labelText: 'Password'),
                             obscureText:
                                 true, // Hide the characters as being entered
+                          ),
+                          const SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                            ),
+                            child: Text(_isLogin ? 'Login' : 'Sigup'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _isLogin = !_isLogin;
+                              });
+                            },
+                            child: Text(_isLogin
+                                ? 'Create anaccount'
+                                : 'Already have an account? Login.'),
                           ),
                         ],
                       ),
