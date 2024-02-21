@@ -19,8 +19,10 @@ class _ChatScreenState extends State<ChatScreen> {
     // Ask the user for permission to receive and handle push notifications
     await fcm.requestPermission();
 
-    final token = await fcm.getToken(); // Get the adrees of the device
-    print(token);
+    // final token = await fcm.getToken(); // Get the adrees of the device
+    // print(token);
+
+    fcm.subscribeToTopic('chat');
   }
 
   @override
