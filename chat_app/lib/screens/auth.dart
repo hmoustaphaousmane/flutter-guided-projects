@@ -25,6 +25,7 @@ class _AuthSceenState extends State<AuthSceen> {
   var _enteredPassword = '';
   File? _selectedImage;
   var _isAuthenticationg = false;
+  var _enteredUsername = '';
 
   void _submit() async {
     final _isValid = _fomKey.currentState!.validate(); // Validate the form
@@ -65,7 +66,7 @@ class _AuthSceenState extends State<AuthSceen> {
             .collection('users')
             .doc(userCredentials.user!.uid)
             .set({
-          'username': 'to be done...',
+          'username': _enteredUsername,
           'email': _enteredEmail,
           'image_url': imageUrl,
         });
@@ -122,6 +123,23 @@ class _AuthSceenState extends State<AuthSceen> {
                             UserImagePicker(onPickImage: (pickedIamge) {
                               _selectedImage = pickedIamge;
                             }),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration:
+                                  const InputDecoration(labelText: 'Username'),
+                              enableSuggestions: false,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.trim().length < 4) {
+                                  return 'Please entre at least 4 characters';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _enteredUsername = value!;
+                              },
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                                 labelText: 'Email Adress'),
